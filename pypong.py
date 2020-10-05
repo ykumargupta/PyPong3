@@ -17,11 +17,12 @@ def createGameObject(x, y, shape, width, length):
     paddle.goto(x, y)
     return paddle
 
-def scoreDraw(score, value, x, y, align):
+def scoreDraw(score, value, x, y, align, color):
     style = ('Courier', 40, 'bold')
     score.goto(x, y)
+    score.pencolor(color)
     score.write(str(value), font=style, align=align)
-
+    
 def paddleDirection(paddle, direction):
     y = paddle.ycor()
     if(y > 230):
@@ -32,11 +33,25 @@ def paddleDirection(paddle, direction):
         y = y + direction
     paddle.sety(y)
 
+def checkScoreColor():
+    scoreColors = []
+    if scoreValue[0] > scoreValue[1]:
+        scoreColors.append('green')
+        scoreColors.append('red')
+    elif scoreValue[0] < scoreValue[1]:
+        scoreColors.append('red')
+        scoreColors.append('green')
+    else:
+        scoreColors.append('white')
+        scoreColors.append('white')
+    return scoreColors
+
 def countScore(score, paddleNumber):
     scoreValue[paddleNumber] = scoreValue[paddleNumber] + 1
     score.clear()
-    scoreDraw(score, scoreValue[0], -200, 300, 'center')
-    scoreDraw(score, scoreValue[1], 200, 300, 'center')
+    scoreColors = checkScoreColor()
+    scoreDraw(score, scoreValue[0], -200, 300, 'center',scoreColors[0])
+    scoreDraw(score, scoreValue[1], 200, 300, 'center',scoreColors[1])
 
 def ballColliderCheck(ball, paddle1, paddle2, score, flag):
     if (ball.ycor() > 290):
@@ -104,8 +119,8 @@ playerName.hideturtle()
 score = turtle.Turtle()
 score.penup()
 score.color('white')
-scoreDraw(score, 0, -200, 300, 'center')
-scoreDraw(score, 0, 200, 300, 'center')
+scoreDraw(score, 0, -200, 300, 'center','white')
+scoreDraw(score, 0, 200, 300, 'center','white')
 score.hideturtle()
 
 leftPaddle = createGameObject(-350, 0, 'square', 5, 1)
